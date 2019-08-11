@@ -51,3 +51,90 @@ class MerkleFile(object):
         self.parent = directory
         self.recalculate_directory_hash()
     
+def getFileDifference(root1, root2, fileChangesFromSystem1, fileChangesFromSystem2):
+    if not root1 and not root2:
+        return fileChangesFromSystem1, fileChangesFromSystem2
+
+    if not root1 or not root2:
+        fileChangesFromSystem1.append(root2)
+        fileChangesFromSystem2.append(root1)
+        return fileChangesFromSystem1, fileChangesFromSystem2
+
+    if root1.hash != root2.hash:
+        fileChangesFromSystem1.append(root2)
+        fileChangesFromSystem2.append(root1)
+
+        root1_children = root1.children
+        root2_children = root2.children
+
+        len_difference = abs(len(root1_children) - len(root2_children))
+
+        if len(root1_children) > len(root2_children):
+            root2_children = root2_children + [None for i in range(len_difference)]
+        elif len(root2_children) > len(root1_children):
+            root1_children = root2_children + [None for i in range(len_difference)]
+        
+        for child1, child2 in zip(root1_children, root2_children):
+            getFileDifference(child1, child2, fileChangesFromSystem1, fileChangesFromSystem2)
+    
+    return fileChangesFromSystem1, fileChangesFromSystem2
+
+#Driver code for the above algorithm
+if __name__ == '__main__':
+
+    # create a directory structure on the first computer
+    root_directory = MerkleFile()
+    root_directory.is_dir = True
+
+    file1 = MerkleFile()
+    file1.is_dir = False
+    file1.add_file_to_directory(root_directory)
+    file1.set_content("owl city rocks!")
+
+    file2 = MerkleFile()
+    file2.is_dir = False
+    file2.add_file_to_directory(root_directory)
+    file2.set_content("owl city rocks again!")
+
+    directory_2 = MerkleFile()
+    directory_2.is_dir = True
+    directory_2.add_file_to_directory(root_directory)
+
+    file3 = MerkleFile()
+    file3.is_dir = False
+    file3.add_file_to_directory(directory_2)
+    file3.set_content("owl city rocks!")
+
+    # create a directory structure on the second computer
+    root_directory_2 = MerkleFile()
+    root_directory_2.is_dir = True
+
+    file1_2 = MerkleFile()
+    file1_2.is_dir = False
+    file1_2.add_file_to_directory(root_directory_2)
+    file1_2.set_content("owl city rocks!")
+
+    file2_2 = MerkleFile()
+    file2_2.is_dir = False
+    file2_2.add_file_to_directory(root_directory_2)
+    file2_2.set_content("owl city rocks again!")
+
+    directory_2_2 = MerkleFile()
+    directory_2_2.is_dir = True
+    directory_2_2.add_file_to_directory(root_directory_2)
+
+    file3_2 = MerkleFile()
+    file3_2.is_dir = False
+    file3_2.add_file_to_directory(directory_2_2)
+    # This is the only file that is different
+    file3_2.set_content("owl city rocks! pop")
+
+    fileChangesFromSystem1, fileChangesFromSystem2 = getFileDifference(
+        root_directory, root_directory_2, [], []
+    )
+
+    #Print Changes
+    for fileObject in fileChangesFromSystem1:
+        if (fileObject.content != ""):
+            print(fileObject.content)
+    
