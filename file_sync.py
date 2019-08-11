@@ -89,12 +89,12 @@ if __name__ == '__main__':
     file1 = MerkleFile()
     file1.is_dir = False
     file1.add_file_to_directory(root_directory)
-    file1.set_content("owl city rocks!")
+    file1.set_content("This is a file!")
 
     file2 = MerkleFile()
     file2.is_dir = False
     file2.add_file_to_directory(root_directory)
-    file2.set_content("owl city rocks again!")
+    file2.set_content("This is another file!")
 
     directory_2 = MerkleFile()
     directory_2.is_dir = True
@@ -103,7 +103,8 @@ if __name__ == '__main__':
     file3 = MerkleFile()
     file3.is_dir = False
     file3.add_file_to_directory(directory_2)
-    file3.set_content("owl city rocks!")
+    # This is the only file that is different in System 1.
+    file3.set_content("Merkel Trees are Great!")
 
     # create a directory structure on the second computer
     root_directory_2 = MerkleFile()
@@ -112,12 +113,12 @@ if __name__ == '__main__':
     file1_2 = MerkleFile()
     file1_2.is_dir = False
     file1_2.add_file_to_directory(root_directory_2)
-    file1_2.set_content("owl city rocks!")
+    file1_2.set_content("This is a file!")
 
     file2_2 = MerkleFile()
     file2_2.is_dir = False
     file2_2.add_file_to_directory(root_directory_2)
-    file2_2.set_content("owl city rocks again!")
+    file2_2.set_content("This is another file!")
 
     directory_2_2 = MerkleFile()
     directory_2_2.is_dir = True
@@ -126,15 +127,15 @@ if __name__ == '__main__':
     file3_2 = MerkleFile()
     file3_2.is_dir = False
     file3_2.add_file_to_directory(directory_2_2)
-    # This is the only file that is different
-    file3_2.set_content("owl city rocks! pop")
+    # This is the only file that is different in System 2.
+    file3_2.set_content("I learned a lot!")
 
     fileChangesFromSystem1, fileChangesFromSystem2 = getFileDifference(
         root_directory, root_directory_2, [], []
     )
 
     #Print Changes
-    for fileObject in fileChangesFromSystem1:
+    for fileObject in fileChangesFromSystem2:
         if (fileObject.content != ""):
             print(fileObject.content)
     
