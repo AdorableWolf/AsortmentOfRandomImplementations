@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - findIslands",
+            "request": "launch",
+            "mainClass": "findIslands",
+            "projectName": "Random_programming_82b50e64"
+        }
+    ]
+}
